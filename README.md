@@ -26,13 +26,12 @@ This project is not affiliated with or endorsed by Garmin.
 
 ## Install
 
-From npm, registered with Claude Code in one line:
+> **npm: coming soon.** The package is not on npm yet. Until it is, install
+> from a checkout as below. Once it is published, registering it with Claude
+> Code will be one line:
+> `claude mcp add connectiq-simulator -- npx -y connectiq-simulator-mcp`
 
-```sh
-claude mcp add connectiq-simulator -- npx -y connectiq-simulator-mcp
-```
-
-Or from a checkout:
+From a checkout:
 
 ```sh
 git clone https://github.com/duyatuan/connectiq-simulator-mcp.git
