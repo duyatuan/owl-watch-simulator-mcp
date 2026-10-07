@@ -5,7 +5,7 @@
   "type": "module",
   "license": "MIT",
   "author": "Tuan Nguyen (The Owlery Works)",
-  "homepage": "https://owleryworks.com.au/connectiq-simulator-mcp/",
+  "homepage": "https://github.com/duyatuan/connectiq-simulator-mcp#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/duyatuan/connectiq-simulator-mcp.git"
