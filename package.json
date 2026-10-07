@@ -1,0 +1,52 @@
+{
+  "name": "connectiq-simulator-mcp",
+  "version": "0.1.0",
+  "description": "MCP server that lets an AI agent build, run, see and drive Garmin Connect IQ apps in the Connect IQ simulator, in the background, even with the screen locked.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Tuan Nguyen (The Owlery Works)",
+  "homepage": "https://owleryworks.com.au/connectiq-simulator-mcp/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/duyatuan/connectiq-simulator-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/duyatuan/connectiq-simulator-mcp/issues"
+  },
+  "bin": {
+    "connectiq-simulator-mcp": "src/index.js"
+  },
+  "files": [
+    "src",
+    "native/helper.swift",
+    "scripts",
+    "README.md",
+    "LICENSE"
+  ],
+  "os": [
+    "darwin"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build:native": "node scripts/build-native.mjs",
+    "postinstall": "node scripts/build-native.mjs --if-possible",
+    "test": "node --test test/*.test.js",
+    "test:live": "CIQ_MCP_LIVE=1 node --test test/live/*.test.js",
+    "check": "for f in src/*.js scripts/*.mjs; do node --check \"$f\" || exit 1; done",
+    "doctor": "node src/index.js --doctor"
+  },
+  "keywords": [
+    "mcp",
+    "garmin",
+    "connect-iq",
+    "monkey-c",
+    "simulator",
+    "model-context-protocol"
+  ],
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.0",
+    "zod": "^4.0.0"
+  }
+}
