@@ -1,20 +1,20 @@
 {
-  "name": "owl-connectiq-simulator-mcp",
+  "name": "owl-watch-simulator-mcp",
   "version": "0.1.0",
   "description": "MCP server that lets an AI agent build, run, see and drive Garmin Connect IQ apps in the Connect IQ simulator, in the background, even with the screen locked.",
   "type": "module",
   "license": "MIT",
   "author": "Tuan Nguyen (The Owlery Works)",
-  "homepage": "https://github.com/duyatuan/owl-connectiq-simulator-mcp#readme",
+  "homepage": "https://github.com/duyatuan/owl-watch-simulator-mcp#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/duyatuan/owl-connectiq-simulator-mcp.git"
+    "url": "git+https://github.com/duyatuan/owl-watch-simulator-mcp.git"
   },
   "bugs": {
-    "url": "https://github.com/duyatuan/owl-connectiq-simulator-mcp/issues"
+    "url": "https://github.com/duyatuan/owl-watch-simulator-mcp/issues"
   },
   "bin": {
-    "owl-connectiq-simulator-mcp": "src/index.js"
+    "owl-watch-simulator-mcp": "src/index.js"
   },
   "files": [
     "src",

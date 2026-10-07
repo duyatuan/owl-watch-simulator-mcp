@@ -1,4 +1,4 @@
-# owl-connectiq-simulator-mcp
+# owl-watch-simulator-mcp
 
 *Owl* is the OwleryWorks Library: open-source tools from [The Owlery Works](https://owleryworks.com.au/).
 
@@ -31,16 +31,16 @@ This project is not affiliated with or endorsed by Garmin.
 > **npm: coming soon.** The package is not on npm yet. Until it is, install
 > from a checkout as below. Once it is published, registering it with Claude
 > Code will be one line:
-> `claude mcp add connectiq-simulator -- npx -y owl-connectiq-simulator-mcp`
+> `claude mcp add owl-watch-simulator -- npx -y owl-watch-simulator-mcp`
 
 From a checkout:
 
 ```sh
-git clone https://github.com/duyatuan/owl-connectiq-simulator-mcp.git
-cd owl-connectiq-simulator-mcp
+git clone https://github.com/duyatuan/owl-watch-simulator-mcp.git
+cd owl-watch-simulator-mcp
 npm install        # also compiles the native helper
 npm run doctor     # checks SDK, Java, key, helper and permissions
-claude mcp add connectiq-simulator -- node "$PWD/src/index.js"
+claude mcp add owl-watch-simulator -- node "$PWD/src/index.js"
 ```
 
 or in any client's JSON configuration:
@@ -48,9 +48,9 @@ or in any client's JSON configuration:
 ```json
 {
   "mcpServers": {
-    "connectiq-simulator": {
+    "owl-watch-simulator": {
       "command": "node",
-      "args": ["/absolute/path/to/owl-connectiq-simulator-mcp/src/index.js"]
+      "args": ["/absolute/path/to/owl-watch-simulator-mcp/src/index.js"]
     }
   }
 }
@@ -122,8 +122,8 @@ To let an agent run the whole loop unattended, allow the server's tools in the p
 
 ```json
 {
-  "permissions": { "allow": ["mcp__connectiq-simulator"] },
-  "enabledMcpjsonServers": ["connectiq-simulator"]
+  "permissions": { "allow": ["mcp__owl-watch-simulator"] },
+  "enabledMcpjsonServers": ["owl-watch-simulator"]
 }
 ```
 
@@ -215,6 +215,16 @@ menus that reach beyond it. It needs Accessibility and Screen Recording, which
 macOS grants to the app that launches it, not to the server alone: grant them
 to a terminal you trust. Report a security problem privately through the
 repository's security advisories rather than an issue.
+
+## Disclaimer
+
+This software is provided "as is", without warranty of any kind, express or
+implied, and without any guarantee that it works, keeps working, or suits your
+purpose. You use it at your own risk. The Owlery Works and the contributors
+accept no responsibility or liability for any loss, damage or other
+consequence of using it, including anything it does to your Mac, your
+simulator, your projects or your data, and anything your AI agent does with
+it. The MIT licence below says the same in legal terms.
 
 ## License
 

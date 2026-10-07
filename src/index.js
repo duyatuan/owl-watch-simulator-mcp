@@ -13,11 +13,11 @@ const argv = process.argv.slice(2);
 if (argv.includes('--version') || argv.includes('-v')) {
   console.log(VERSION);
 } else if (argv.includes('--help') || argv.includes('-h')) {
-  console.log(`owl-connectiq-simulator-mcp ${VERSION}
+  console.log(`owl-watch-simulator-mcp ${VERSION}
 
 Usage:
-  owl-connectiq-simulator-mcp            run the MCP server on stdio
-  owl-connectiq-simulator-mcp --doctor   check SDK, Java, developer key, helper and permissions
+  owl-watch-simulator-mcp            run the MCP server on stdio
+  owl-watch-simulator-mcp --doctor   check SDK, Java, developer key, helper and permissions
 
 Environment:
   CIQ_SDK_HOME        Connect IQ SDK directory (default: the SDK Manager's current SDK)
@@ -33,7 +33,7 @@ Environment:
 
 async function serve() {
   if (process.platform !== 'darwin') {
-    console.error('owl-connectiq-simulator-mcp only supports macOS.');
+    console.error('owl-watch-simulator-mcp only supports macOS.');
     process.exit(1);
   }
   const context = createContext();
@@ -53,8 +53,8 @@ async function serve() {
   process.stdin.on('end', shutdown);
   process.stdin.on('close', shutdown);
   // A bug in one tool call must not take the whole server down mid-session.
-  process.on('uncaughtException', (error) => console.error('[owl-connectiq-simulator-mcp] uncaught exception:', error));
-  process.on('unhandledRejection', (error) => console.error('[owl-connectiq-simulator-mcp] unhandled rejection:', error));
+  process.on('uncaughtException', (error) => console.error('[owl-watch-simulator-mcp] uncaught exception:', error));
+  process.on('unhandledRejection', (error) => console.error('[owl-watch-simulator-mcp] unhandled rejection:', error));
   await server.connect(new StdioServerTransport());
   // Start the helper now so its text recognition model is loaded by first use.
   runHelper('version').catch(() => undefined);

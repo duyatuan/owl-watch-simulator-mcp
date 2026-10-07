@@ -172,7 +172,7 @@ export function createContext() {
  * @returns {McpServer}
  */
 export function createServer(context = createContext()) {
-  const server = new McpServer({ name: 'connectiq-simulator', version: VERSION }, { instructions: INSTRUCTIONS });
+  const server = new McpServer({ name: 'owl-watch-simulator', version: VERSION }, { instructions: INSTRUCTIONS });
 
   /** Every tool's handler and argument schema, so run_steps can call them directly. */
   /** @type {Map<string, { handler: (args: any) => Promise<{ content: any[], isError?: boolean }>, schema: z.ZodType }>} */
@@ -200,7 +200,7 @@ export function createServer(context = createContext()) {
         try {
           return await handler(args ?? {});
         } catch (error) {
-          if (!(error instanceof CiqError)) console.error(`[owl-connectiq-simulator-mcp] ${name} failed:`, error);
+          if (!(error instanceof CiqError)) console.error(`[owl-watch-simulator-mcp] ${name} failed:`, error);
           return { isError: true, content: [text({ error: describeError(error) })] };
         }
       },

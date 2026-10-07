@@ -7,9 +7,9 @@ import { buildHelper } from '../src/helper.js';
 
 const lenient = process.argv.includes('--if-possible');
 try {
-  if (process.platform !== 'darwin') throw new Error('owl-connectiq-simulator-mcp only supports macOS');
+  if (process.platform !== 'darwin') throw new Error('owl-watch-simulator-mcp only supports macOS');
   console.log(`built ${await buildHelper()}`);
 } catch (error) {
-  console.error(`owl-connectiq-simulator-mcp: ${error.message}${error.hint ? `\n  ${error.hint}` : ''}`);
+  console.error(`owl-watch-simulator-mcp: ${error.message}${error.hint ? `\n  ${error.hint}` : ''}`);
   process.exit(lenient ? 0 : 1);
 }
