@@ -1,4 +1,6 @@
-# connectiq-simulator-mcp
+# owl-connectiq-simulator-mcp
+
+*Owl* is the OwleryWorks Library: open-source tools from [The Owlery Works](https://owleryworks.com.au/).
 
 An [MCP](https://modelcontextprotocol.io) server that lets an AI agent build, run, see and drive Garmin Connect IQ apps in the Connect IQ simulator on macOS.
 
@@ -29,13 +31,13 @@ This project is not affiliated with or endorsed by Garmin.
 > **npm: coming soon.** The package is not on npm yet. Until it is, install
 > from a checkout as below. Once it is published, registering it with Claude
 > Code will be one line:
-> `claude mcp add connectiq-simulator -- npx -y connectiq-simulator-mcp`
+> `claude mcp add connectiq-simulator -- npx -y owl-connectiq-simulator-mcp`
 
 From a checkout:
 
 ```sh
-git clone https://github.com/duyatuan/connectiq-simulator-mcp.git
-cd connectiq-simulator-mcp
+git clone https://github.com/duyatuan/owl-connectiq-simulator-mcp.git
+cd owl-connectiq-simulator-mcp
 npm install        # also compiles the native helper
 npm run doctor     # checks SDK, Java, key, helper and permissions
 claude mcp add connectiq-simulator -- node "$PWD/src/index.js"
@@ -48,7 +50,7 @@ or in any client's JSON configuration:
   "mcpServers": {
     "connectiq-simulator": {
       "command": "node",
-      "args": ["/absolute/path/to/connectiq-simulator-mcp/src/index.js"]
+      "args": ["/absolute/path/to/owl-connectiq-simulator-mcp/src/index.js"]
     }
   }
 }

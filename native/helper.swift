@@ -1,4 +1,4 @@
-// ciq-sim-helper: the native half of connectiq-simulator-mcp.
+// ciq-sim-helper: the native half of owl-connectiq-simulator-mcp.
 //
 // Two ways to run it, same commands and same JSON either way:
 //
@@ -353,7 +353,7 @@ func screenLocked() -> Bool {
 func wakeDisplayIfAsleep() -> Bool {
     guard CGDisplayIsAsleep(CGMainDisplayID()) != 0 else { return false }
     var assertion: IOPMAssertionID = 0
-    IOPMAssertionDeclareUserActivity("connectiq-simulator-mcp" as CFString, kIOPMUserActiveLocal, &assertion)
+    IOPMAssertionDeclareUserActivity("owl-connectiq-simulator-mcp" as CFString, kIOPMUserActiveLocal, &assertion)
     let deadline = Date().addingTimeInterval(6)
     while CGDisplayIsAsleep(CGMainDisplayID()) != 0, Date() < deadline { usleep(100_000) }
     usleep(700_000) // the first frames after a wake are not capturable yet

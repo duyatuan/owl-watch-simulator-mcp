@@ -30,11 +30,11 @@ async function mtime(file) {
  */
 export async function buildHelper() {
   if (process.platform !== 'darwin') {
-    throw new CiqError('unsupported_platform', 'connectiq-simulator-mcp only supports macOS.');
+    throw new CiqError('unsupported_platform', 'owl-connectiq-simulator-mcp only supports macOS.');
   }
   const targets = [
     path.join(packageRoot, 'native', 'bin'),
-    path.join(os.homedir(), 'Library', 'Caches', 'connectiq-simulator-mcp'),
+    path.join(os.homedir(), 'Library', 'Caches', 'owl-connectiq-simulator-mcp'),
   ];
   /** @type {unknown} */
   let lastError;
@@ -75,7 +75,7 @@ async function resolveHelper() {
   const sourceTime = await mtime(helperSource);
   for (const candidate of [
     path.join(packageRoot, 'native', 'bin', 'ciq-sim-helper'),
-    path.join(os.homedir(), 'Library', 'Caches', 'connectiq-simulator-mcp', 'ciq-sim-helper'),
+    path.join(os.homedir(), 'Library', 'Caches', 'owl-connectiq-simulator-mcp', 'ciq-sim-helper'),
   ]) {
     const builtTime = await mtime(candidate);
     if (builtTime !== undefined && (sourceTime === undefined || builtTime >= sourceTime)) return candidate;

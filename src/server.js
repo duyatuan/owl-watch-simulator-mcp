@@ -200,7 +200,7 @@ export function createServer(context = createContext()) {
         try {
           return await handler(args ?? {});
         } catch (error) {
-          if (!(error instanceof CiqError)) console.error(`[connectiq-simulator-mcp] ${name} failed:`, error);
+          if (!(error instanceof CiqError)) console.error(`[owl-connectiq-simulator-mcp] ${name} failed:`, error);
           return { isError: true, content: [text({ error: describeError(error) })] };
         }
       },
