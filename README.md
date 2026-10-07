@@ -28,18 +28,20 @@ This project is not affiliated with or endorsed by Garmin.
 
 ## Install
 
-> **npm: coming soon.** The package is not on npm yet. Until it is, install
-> from a checkout as below. Once it is published, registering it with Claude
-> Code will be one line:
-> `claude mcp add owl-watch-simulator -- npx -y owl-watch-simulator-mcp`
+From [npm](https://www.npmjs.com/package/owl-watch-simulator-mcp), registered with Claude Code in one line:
 
-From a checkout:
+```sh
+claude mcp add owl-watch-simulator -- npx -y owl-watch-simulator-mcp
+npx -y owl-watch-simulator-mcp --doctor   # checks SDK, Java, key, helper and permissions
+```
+
+Or from a checkout:
 
 ```sh
 git clone https://github.com/duyatuan/owl-watch-simulator-mcp.git
 cd owl-watch-simulator-mcp
 npm install        # also compiles the native helper
-npm run doctor     # checks SDK, Java, key, helper and permissions
+npm run doctor
 claude mcp add owl-watch-simulator -- node "$PWD/src/index.js"
 ```
 
@@ -49,8 +51,8 @@ or in any client's JSON configuration:
 {
   "mcpServers": {
     "owl-watch-simulator": {
-      "command": "node",
-      "args": ["/absolute/path/to/owl-watch-simulator-mcp/src/index.js"]
+      "command": "npx",
+      "args": ["-y", "owl-watch-simulator-mcp"]
     }
   }
 }
