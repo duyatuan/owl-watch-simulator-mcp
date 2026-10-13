@@ -1,6 +1,7 @@
 {
   "name": "owl-watch-simulator-mcp",
-  "version": "0.1.0",
+  "mcpName": "io.github.duyatuan/owl-watch-simulator-mcp",
+  "version": "0.1.1",
   "description": "MCP server that lets an AI agent build, run, see and drive Garmin Connect IQ apps in the Connect IQ simulator, in the background, even with the screen locked.",
   "type": "module",
   "license": "MIT",

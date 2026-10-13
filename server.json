@@ -1,0 +1,22 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.duyatuan/owl-watch-simulator-mcp",
+  "title": "Garmin Connect IQ Simulator",
+  "description": "Lets AI agents build, run, see and drive Garmin Connect IQ watch apps in the simulator on macOS",
+  "repository": {
+    "url": "https://github.com/duyatuan/owl-watch-simulator-mcp",
+    "source": "github"
+  },
+  "websiteUrl": "https://github.com/duyatuan/owl-watch-simulator-mcp#readme",
+  "version": "0.1.1",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "owl-watch-simulator-mcp",
+      "version": "0.1.1",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}
