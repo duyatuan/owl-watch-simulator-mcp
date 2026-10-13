@@ -1,8 +1,13 @@
 # owl-watch-simulator-mcp
 
-*Owl* is the OwleryWorks Library: open-source tools from [The Owlery Works](https://owleryworks.com.au/).
+[![npm](https://img.shields.io/npm/v/owl-watch-simulator-mcp)](https://www.npmjs.com/package/owl-watch-simulator-mcp)
+[![test](https://github.com/duyatuan/owl-watch-simulator-mcp/actions/workflows/test.yml/badge.svg)](https://github.com/duyatuan/owl-watch-simulator-mcp/actions/workflows/test.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+![Platform: macOS](https://img.shields.io/badge/platform-macOS-lightgrey)
 
-An [MCP](https://modelcontextprotocol.io) server that lets an AI agent build, run, see and drive Garmin Connect IQ apps in the Connect IQ simulator on macOS.
+**An [MCP](https://modelcontextprotocol.io) server for Garmin Connect IQ.** It lets an AI coding agent such as Claude Code, Cursor or GitHub Copilot build, run, see and drive Garmin watch apps written in Monkey C, in the Connect IQ simulator on macOS.
+
+Use it to let an agent check its own UI changes, reproduce a bug from a description, or run the same flow on several watch models and compare the screens.
 
 It is meant to feel like the tooling agents already have for iOS simulators and for browsers: one call builds and launches the app and returns the screen, and every action returns the next one. As with Playwright, the agent acts on what the screen says and waits on conditions, not on pixel guesses and sleeps.
 
@@ -15,7 +20,7 @@ It is meant to feel like the tooling agents already have for iOS simulators and 
 - **Stays inside the simulator.** `select_menu` refuses the application menu (macOS Services, Hide Others, Quit) and the Window menu, and nothing raises the simulator over your work.
 - **Device pixels everywhere.** A screenshot is exactly the watch display, one image pixel per device pixel, so the coordinates an agent reads off the picture are the coordinates it taps.
 
-This project is not affiliated with or endorsed by Garmin.
+*Owl* is the OwleryWorks Library: open-source tools from [The Owlery Works](https://owleryworks.com.au/). This project is not affiliated with or endorsed by Garmin.
 
 ## Requirements
 
@@ -45,7 +50,9 @@ npm run doctor
 claude mcp add owl-watch-simulator -- node "$PWD/src/index.js"
 ```
 
-or in any client's JSON configuration:
+### Other MCP clients
+
+Claude Desktop (`~/Library/Application Support/Claude/claude_desktop_config.json`), Cursor (`~/.cursor/mcp.json`), Windsurf and most other clients take this:
 
 ```json
 {
@@ -57,6 +64,21 @@ or in any client's JSON configuration:
   }
 }
 ```
+
+VS Code with GitHub Copilot (`.vscode/mcp.json`) names the key `servers`:
+
+```json
+{
+  "servers": {
+    "owl-watch-simulator": {
+      "command": "npx",
+      "args": ["-y", "owl-watch-simulator-mcp"]
+    }
+  }
+}
+```
+
+OpenAI Codex CLI: `codex mcp add owl-watch-simulator -- npx -y owl-watch-simulator-mcp`.
 
 ### Permissions
 

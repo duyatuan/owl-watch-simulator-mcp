@@ -39,11 +39,26 @@
   },
   "keywords": [
     "mcp",
+    "mcp-server",
+    "model-context-protocol",
     "garmin",
+    "garmin-connect-iq",
     "connect-iq",
+    "connectiq",
     "monkey-c",
+    "monkeyc",
+    "garmin-watch",
+    "smartwatch",
+    "wearables",
     "simulator",
-    "model-context-protocol"
+    "emulator",
+    "screenshot",
+    "ui-testing",
+    "test-automation",
+    "ai-agent",
+    "claude-code",
+    "cursor",
+    "macos"
   ],
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.32.0",
