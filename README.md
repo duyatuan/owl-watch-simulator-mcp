@@ -196,6 +196,8 @@ The simulator's own remote interface (a TCP shell on port 1234) can push files a
 | `menu_refused` on `select_menu` | The application and Window menus reach outside the simulator; use `stop_simulator` to quit |
 | `opens_file_panel` on `dialog_click` | The click would open a system file panel while the screen is locked; unlock and use `dialog_action`, or leave it to a person |
 | `layout_unknown` | The window shows a different device than expected; call `run_app` again |
+| `simulatorRestarted` in a `run_app` result | The simulator kept showing the previous device, so it was restarted; set the GPS position and any other simulator settings again |
+| `device_not_shown` on `run_app` | The simulator kept the previous device even after a restart; quit it with `stop_simulator`, open it once by hand, and run again |
 | Web requests fail with -1001 in the simulator | Untick Settings > Use Device HTTPS Requirements (`select_menu`) |
 | `helper_build_failed` | Install the Xcode Command Line Tools, then `npm run build:native` |
 

@@ -440,24 +440,47 @@ export function createServer(context = createContext()) {
 
       const simulator = await context.simulator();
       const session = await context.session();
-      const running = await simulator.ensureRunning();
-      if (running.started) report.simulatorStarted = true;
-      await simulator.exclusive(() => session.start({ prg, device: device.id, simulatorPid: running.pid }));
-
-      // monkeydo exits at once when the launch fails, and stays while the app runs.
       const waitMs = args.waitMs ?? 3000;
-      const deadline = Date.now() + Math.max(waitMs, 20_000);
-      await session.settle(waitMs);
-      session.assertLaunched();
-      // The simulator swaps its window when the device changes: wait for the right one.
-      while (session.state === 'running' && Date.now() < deadline) {
-        const status = await simulator.status();
-        const window = status.simulator?.windows?.find((/** @type {any} */ w) => w.kind === 'device');
-        const shown = window ? deviceNameFromTitle(window.title) : undefined;
-        if (window && (shown === undefined || shown === device.name)) break;
-        await session.settle(500);
+      /**
+       * Launches the app, then waits for the simulator to show the device.
+       * @returns {Promise<string | undefined>} the device it still shows instead, if the app runs but the device never changed
+       */
+      const launch = async () => {
+        const running = await simulator.ensureRunning();
+        if (running.started) report.simulatorStarted = true;
+        await simulator.exclusive(() => session.start({ prg, device: device.id, simulatorPid: running.pid }));
+
+        // monkeydo exits at once when the launch fails, and stays while the app runs.
+        const deadline = Date.now() + Math.max(waitMs, 20_000);
+        await session.settle(waitMs);
+        session.assertLaunched();
+        // The simulator swaps its window when the device changes: wait for the right one.
+        /** @type {string | undefined} */
+        let shown;
+        while (session.state === 'running' && Date.now() < deadline) {
+          const status = await simulator.status();
+          const window = status.simulator?.windows?.find((/** @type {any} */ w) => w.kind === 'device');
+          shown = window ? deviceNameFromTitle(window.title) : undefined;
+          if (window && (shown === undefined || shown === device.name)) return undefined;
+          await session.settle(500);
+        }
+        session.assertLaunched();
+        return session.state === 'running' ? shown : undefined;
+      };
+      let stuckOn = await launch();
+      if (stuckOn) {
+        // A simulator that has run for a while sometimes ignores the device in
+        // a launch and keeps the old window. A fresh one takes it.
+        await session.detach();
+        await simulator.quit();
+        report.simulatorRestarted = `It kept showing ${stuckOn}. Simulator settings such as the GPS position are back to their defaults.`;
+        stuckOn = await launch();
       }
-      session.assertLaunched();
+      if (stuckOn) {
+        throw new CiqError('device_not_shown', `The simulator still shows ${stuckOn}, not ${device.name}, after a restart.`, {
+          hint: 'Quit it with stop_simulator, open it once by hand to clear any prompt, then run again.',
+        });
+      }
       report.app = session.info();
       const logs = session.logs({ limit: 40 });
       if (logs.lines.length) report.output = logs.lines.map((line) => line.text);

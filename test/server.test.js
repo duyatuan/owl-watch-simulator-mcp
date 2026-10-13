@@ -1,5 +1,8 @@
 import assert from 'node:assert/strict';
-import { test } from 'node:test';
+import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
+import { mock, test } from 'node:test';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js';
 import { CiqError } from '../src/errors.js';
@@ -108,4 +111,121 @@ test('select_menu refuses before touching the simulator', async () => {
   const result = await client.callTool({ name: 'select_menu', arguments: { path: ['Window', 'Arrange in Front'] } });
   assert.equal(result.isError, true);
   assert.match(JSON.stringify(result.content), /menu_refused/);
+});
+
+/**
+ * A server whose simulator either takes the device in a launch or keeps
+ * showing the fēnix 8, as a long-running simulator sometimes does. Time is
+ * mocked: each settle advances the clock instead of waiting.
+ *
+ * @param {(simulatorRun: number) => boolean} takesDevice whether the nth simulator started takes the device
+ */
+async function runAppWorld(takesDevice) {
+  const work = await mkdtemp(path.join(os.tmpdir(), 'ciq-run-app-'));
+  const dir = path.join(work, 'devices', 'fenix7');
+  await mkdir(dir, { recursive: true });
+  await writeFile(path.join(dir, 'compiler.json'), JSON.stringify({ deviceId: 'fenix7', displayName: 'fēnix® 7 / quatix® 7', resolution: { width: 260, height: 260 } }));
+  await writeFile(path.join(dir, 'simulator.json'), JSON.stringify({ image: 'fenix7.png', display: { shape: 'round', location: { x: 1, y: 1, width: 260, height: 260 } }, keys: [] }));
+  const prg = path.join(work, 'app.prg');
+  await writeFile(prg, '');
+
+  const log = { starts: 0, quits: 0 };
+  let running = true;
+  let run = 1;
+  let shown = 'fēnix® 8 43mm';
+  let state = 'idle';
+  const simulator = {
+    ensureRunning: async () => {
+      const started = !running;
+      if (started) run += 1;
+      running = true;
+      return { started, pid: run };
+    },
+    exclusive: (/** @type {() => any} */ fn) => fn(),
+    status: async () => ({ simulator: running ? { windows: [{ kind: 'device', title: `CIQ Simulator - ${shown} (5.2.0)` }] } : undefined }),
+    quit: async () => {
+      log.quits += 1;
+      running = false;
+      return true;
+    },
+  };
+  const session = {
+    get state() {
+      return state;
+    },
+    start: async () => {
+      log.starts += 1;
+      state = 'running';
+      if (takesDevice(run)) shown = 'fēnix® 7 / quatix® 7';
+    },
+    settle: async (/** @type {number} */ ms) => {
+      mock.timers.tick(ms);
+      return state;
+    },
+    assertLaunched: () => {},
+    detach: async () => {},
+    info: () => ({ state }),
+    logs: () => ({ lines: [] }),
+  };
+  const server = createServer({
+    sdk: async () => /** @type {any} */ ({ devicesDir: path.join(work, 'devices') }),
+    simulator: async () => /** @type {any} */ (simulator),
+    session: async () => /** @type {any} */ (session),
+    shutdown: async () => {},
+  });
+  const client = new Client({ name: 'test', version: '0' });
+  const [clientSide, serverSide] = InMemoryTransport.createLinkedPair();
+  await Promise.all([server.connect(serverSide), client.connect(clientSide)]);
+  const call = async () => {
+    const result = /** @type {any} */ (await client.callTool({ name: 'run_app', arguments: { prg, device: 'fenix7', screenshot: false } }));
+    return { isError: result.isError, body: JSON.parse(result.content[0].text) };
+  };
+  const close = async () => {
+    await server.close();
+    await rm(work, { recursive: true, force: true });
+  };
+  return { call, log, close };
+}
+
+test('run_app restarts a simulator that keeps showing the old device', async () => {
+  mock.timers.enable({ apis: ['Date'] });
+  const world = await runAppWorld((run) => run > 1);
+  try {
+    const { isError, body } = await world.call();
+    assert.equal(isError, undefined);
+    assert.match(body.simulatorRestarted, /fēnix® 8 43mm/);
+    assert.equal(body.simulatorStarted, true);
+    assert.deepEqual(world.log, { starts: 2, quits: 1 });
+  } finally {
+    mock.timers.reset();
+    await world.close();
+  }
+});
+
+test('run_app does not restart a simulator that takes the device', async () => {
+  mock.timers.enable({ apis: ['Date'] });
+  const world = await runAppWorld(() => true);
+  try {
+    const { isError, body } = await world.call();
+    assert.equal(isError, undefined);
+    assert.equal(body.simulatorRestarted, undefined);
+    assert.deepEqual(world.log, { starts: 1, quits: 0 });
+  } finally {
+    mock.timers.reset();
+    await world.close();
+  }
+});
+
+test('run_app reports device_not_shown rather than the old device', async () => {
+  mock.timers.enable({ apis: ['Date'] });
+  const world = await runAppWorld(() => false);
+  try {
+    const { isError, body } = await world.call();
+    assert.equal(isError, true);
+    assert.equal(body.error.code, 'device_not_shown');
+    assert.deepEqual(world.log, { starts: 2, quits: 1 });
+  } finally {
+    mock.timers.reset();
+    await world.close();
+  }
 });
