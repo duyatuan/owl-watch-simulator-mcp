@@ -9,6 +9,10 @@
 
 Use it to let an agent check its own UI changes, reproduce a bug from a description, or run the same flow on several watch models and compare the screens.
 
+![An agent launches a Garmin Connect IQ transit app on a fēnix 8 in the simulator, sets the GPS position, waits for the stop, taps "Trains" by its label, opens a departure, then runs the same flow on a fēnix 7 and a Venu 3](https://raw.githubusercontent.com/duyatuan/owl-watch-simulator-mcp/main/docs/demo.gif)
+
+*A real session with [Next Depart NSW](https://owleryworks.com.au/next-depart-nsw/), our Connect IQ app for NSW public transport departures: each call returns the screen as a picture and as text with tap-ready positions.*
+
 It is meant to feel like the tooling agents already have for iOS simulators and for browsers: one call builds and launches the app and returns the screen, and every action returns the next one. As with Playwright, the agent acts on what the screen says and waits on conditions, not on pixel guesses and sleeps.
 
 - **The screen as text.** A watch display is a canvas with no element tree, so every result carries the text recognised on it with tap-ready positions, such as `"Trains" (129,140)`. `tap_text` presses by label; `wait_for` waits for text to appear, to disappear, or for the screen to settle.
